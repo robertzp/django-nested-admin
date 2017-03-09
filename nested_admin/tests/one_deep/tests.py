@@ -39,7 +39,7 @@ class disable_string_if_invalid_for_grappelli(override_settings):
 
     def __init__(self):
         self.options = {"TEMPLATES": [settings.TEMPLATES[0].copy()]}
-        if BaseNestedAdminTestCase.has_grappelli:
+        if 'grappelli' in settings.INSTALLED_APPS:
             self.options['TEMPLATES'][0]['OPTIONS'].pop('string_if_invalid')
 
 
