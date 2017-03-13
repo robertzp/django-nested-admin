@@ -5,6 +5,7 @@ import tempfile
 import django
 
 import django_admin_testutils.settings
+import dj_database_url
 
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -13,12 +14,16 @@ temp_dir = tempfile.mkdtemp()
 
 DEBUG = NESTED_ADMIN_DEBUG = True
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ':memory:'
-    }
+    'default': dj_database_url.parse(os.environ.get('DATABASE_URL', 'sqlite://:memory:')),
 }
 SECRET_KEY = 'z-i*xqqn)r0i7leak^#clq6y5j8&tfslp^a4duaywj2$**s*0_'
+
+if django.VERSION > (2, 0):
+    MIGRATION_MODULES = {
+        'auth': None,
+        'contenttypes': None,
+        'sessions': None,
+    }
 
 try:
     import grappelli  # noqa

@@ -37,6 +37,8 @@ class RunTests(django_admin_testutils.RunTests):
 
     def execute(self, flags, test_labels):
         test_labels = [expand_test_module(m) for m in test_labels]
+        if '--noinput' not in flags and '--no-input' not in flags:
+            flags += ['--noinput']
         super(RunTests, self).execute(flags, test_labels)
 
 
