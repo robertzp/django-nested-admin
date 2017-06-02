@@ -33,16 +33,17 @@
           </tr>
       </thead>
 
-        {% with inline_admin_formset.opts.sortable_field_name|default:"" as sortable_field_name %}
+        {% with inline_admin_formset.opts.sortable_field_name|default:"" as sortable_field_name %} <tbody >
         {% for inline_admin_form in inline_admin_formset|formsetsort:sortable_field_name %}
-            <tbody class="djn-tbody{% if not forloop.last %} djn-item{% endif %} djn-inline-form{% if inline_admin_formset.opts.classes %} {{ inline_admin_formset.opts.classes|join:" " }}{% endif %}{% if inline_admin_form.original or inline_admin_form.show_url %} has_original{% endif %}{% if forloop.last %} djn-empty-form empty-form{% endif %}{% if inline_admin_form.form.inlines %} djn-has-inlines{% endif %}"
+           
+
+            {% if inline_admin_form.form.non_field_errors %}
+            <tr class="djn-tbody{% if not forloop.last %} djn-item{% endif %} djn-inline-form{% if inline_admin_formset.opts.classes %} {{ inline_admin_formset.opts.classes|join:" " }}{% endif %}{% if inline_admin_form.original or inline_admin_form.show_url %} has_original{% endif %}{% if forloop.last %} djn-empty-form empty-form{% endif %}{% if inline_admin_form.form.inlines %} djn-has-inlines{% endif %}"
                 {% if inline_admin_form.pk_field.field %}
                 data-is-initial="{% if inline_admin_form.pk_field.field.value %}true{% else %}false{% endif %}"
                 {% endif %}
                 id="{{ inline_admin_formset.formset.prefix }}-{% if forloop.last %}empty{% else %}{%if is_nested %}{% endif %}{{ inline_admin_form.form|form_index }}{% endif %}">
-
-            {% if inline_admin_form.form.non_field_errors %}
-            <tr><td class="djn-td" colspan="{{ inline_admin_form|cell_count }}">
+                <td class="djn-td" colspan="{{ inline_admin_form|cell_count }}">
                 {% ifsuit %}
                 <div class="control-group error"><div class="help-block">{{ inline_admin_form.form.non_field_errors }}</div></div>
                 {% else %}
@@ -52,7 +53,11 @@
                 {% endifsuit %}
             </td></tr>
             {% endif %}
-            <tr class="djn-tr form-row{% if inline_admin_form.original or inline_admin_form.show_url %} has_original{% endif %}">
+            <tr class="djn-tr form-row{% if inline_admin_form.original or inline_admin_form.show_url %} has_original{% endif %} djn-tbody{% if not forloop.last %} djn-item{% endif %} djn-inline-form{% if inline_admin_formset.opts.classes %} {{ inline_admin_formset.opts.classes|join:" " }}{% endif %}{% if inline_admin_form.original or inline_admin_form.show_url %} has_original{% endif %}{% if forloop.last %} djn-empty-form empty-form{% endif %}{% if inline_admin_form.form.inlines %} djn-has-inlines{% endif %}"
+                {% if inline_admin_form.pk_field.field %}
+                data-is-initial="{% if inline_admin_form.pk_field.field.value %}true{% else %}false{% endif %}"
+                {% endif %}
+                id="{{ inline_admin_formset.formset.prefix }}-{% if forloop.last %}empty{% else %}{%if is_nested %}{% endif %}{{ inline_admin_form.form|form_index }}{% endif %}">
 
                 <td class="original{% if inline_admin_formset.opts.sortable_field_name %} is-sortable{% endif %}">
                 {% if inline_admin_form.original or inline_admin_form.show_url %}<p>
@@ -120,17 +125,17 @@
                 </td></tr>
             {% endif %}
 
-            </tbody>
+            
             {% if forloop.last %}
-                <tbody>
+            
                     <tr class="add-row">
                         <td colspan="{{ inline_admin_form|cell_count }}" class="djn-add-item">
                             <a href="javascript://" class="add-handler djn-add-handler {{ inline_admin_formset.handler_classes|join:" " }}">{% blocktrans with inline_admin_formset.opts.verbose_name|strip_parent_name:inline_opts.verbose_name|title as verbose_name %}Add another {{ verbose_name }}{% endblocktrans %}</a>
                         </td>
                     </tr>
-                </tbody>
+               
             {% endif %}
-        {% endfor %}
+        {% endfor %}</tbody>
         {% endwith %}
 
     </table>
